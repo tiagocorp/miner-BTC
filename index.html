@@ -2,73 +2,227 @@
 <html lang="pt-br">
 <head>
 <meta charset="UTF-8">
-<title>Fake Bitcoin Miner</title>
+<title>Miner BTC</title>
+
 <style>
 body{
     margin:0;
-    font-family: Arial, sans-serif;
-    background:#0f172a;
+    font-family:Arial, Helvetica, sans-serif;
+    background:#020617;
     color:#fff;
-    display:flex;
-    justify-content:center;
-    align-items:center;
+}
+
+.container{
+    display:grid;
+    grid-template-columns: 1fr 1fr;
     height:100vh;
 }
+
+/* Painel esquerdo */
+.left{
+    padding:25px;
+    display:flex;
+    flex-direction:column;
+    gap:20px;
+}
+
+/* Painel direito */
+.right{
+    padding:25px;
+    background:#020617;
+    display:grid;
+    grid-template-rows:auto 1fr 1fr;
+    gap:15px;
+}
+
 .card{
     background:#020617;
-    padding:25px;
+    border:1px solid #0f172a;
     border-radius:12px;
-    width:320px;
-    text-align:center;
+    padding:18px;
 }
-h1{margin-bottom:10px;}
-#btc{
-    font-size:26px;
-    margin:10px 0;
+
+h1{
+    margin:0;
+    font-size:22px;
+}
+
+.btc{
+    font-size:32px;
     color:#22c55e;
 }
+
 button{
-    width:100%;
     padding:12px;
     border:none;
     border-radius:8px;
+    background:#2563eb;
+    color:#fff;
     font-size:16px;
     cursor:pointer;
-    background:#2563eb;
-    color:white;
 }
-small{color:#94a3b8;}
+
+.info{
+    display:flex;
+    justify-content:space-between;
+    font-size:14px;
+    color:#94a3b8;
+}
+
+.bars{
+    display:flex;
+    align-items:flex-end;
+    gap:8px;
+    height:120px;
+}
+
+.bar{
+    flex:1;
+    background:#22c55e;
+    border-radius:4px 4px 0 0;
+    height:20px;
+    transition:.3s;
+}
+
+.profile{
+    display:flex;
+    align-items:center;
+    gap:12px;
+}
+
+.avatar{
+    width:42px;
+    height:42px;
+    border-radius:50%;
+    background:#2563eb;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-weight:bold;
+}
+
+.status{
+    color:#22c55e;
+    font-size:13px;
+}
+.money{
+    font-size:22px;
+    color:#38bdf8;
+}
 </style>
 </head>
 <body>
 
-<div class="card">
-    <h1>⛏ Fake BTC Miner</h1>
-    <div id="btc">0.00000000 BTC</div>
+<div class="container">
 
-    <button onclick="mine()">Minerar agora</button>
-    <br><br>
-    <small id="log">Pronto pra minerar...</small>
+<!-- ESQUERDA -->
+<div class="left">
+
+    <div class="card">
+        <h1>⛏ Miner BTC</h1>
+        <div class="btc" id="btc">0.00000000 BTC</div>
+        <button onclick="mine()">Minerar agora</button>
+        <div style="margin-top:10px;color:#94a3b8" id="log">
+            Blocos encontrados: 0
+        </div>
+    </div>
+
+    <div class="card info">
+        <div>💸 Saldo</div>
+        <div class="money" id="money">R$ 0,00</div>
+    </div>
+
+    <div class="card profile">
+        <div class="avatar">T</div>
+        <div>
+            <div>Tiago</div>
+            <div class="status">● Online</div>
+        </div>
+    </div>
+
+</div>
+
+<!-- DIREITA -->
+<div class="right">
+
+    <div class="card">
+        📊 Hashrate (fake)
+        <div class="bars" id="graph1">
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
+        </div>
+    </div>
+
+    <div class="card">
+        📈 Blocos por minuto
+        <div class="bars" id="graph2">
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
+        </div>
+    </div>
+
+    <div class="card">
+        🌐 Rede
+        <div style="color:#94a3b8;font-size:14px">
+            Pool conectada<br>
+            Latência: <span id="ping">--</span> ms<br>
+            Peers online: <span id="peers">--</span>
+        </div>
+    </div>
+
+</div>
+
 </div>
 
 <script>
-let saldo = 0;
+
+let saldoBTC = 0;
+let blocos = 0;
+let saldoReais = 0;
+
+function randomizeGraphs(){
+    document.querySelectorAll(".bar").forEach(bar=>{
+        bar.style.height = (Math.random()*100+10)+"px";
+    });
+
+    document.getElementById("ping").innerText =
+        Math.floor(Math.random()*60)+20;
+
+    document.getElementById("peers").innerText =
+        Math.floor(Math.random()*120)+40;
+}
 
 function mine(){
 
-    // valor fake aleatório
-    let ganho = Math.random() * 0.0008;
+    let ganho = Math.random() * 0.0006;
+    saldoBTC += ganho;
+    blocos++;
 
-    saldo += ganho;
+    let cotacaoFake = 280000; // BTC fake em reais
+    saldoReais = saldoBTC * cotacaoFake;
 
     document.getElementById("btc").innerText =
-        saldo.toFixed(8) + " BTC";
+        saldoBTC.toFixed(8) + " BTC";
 
     document.getElementById("log").innerText =
-        "Bloco encontrado: +" + ganho.toFixed(8) + " BTC";
+        "Blocos encontrados: " + blocos;
+
+    document.getElementById("money").innerText =
+        "R$ " + saldoReais.toFixed(2);
+
+    randomizeGraphs();
 }
+
+// anima os gráficos sozinhos
+setInterval(randomizeGraphs, 2000);
+
 </script>
 
 </body>
 </html>
-
