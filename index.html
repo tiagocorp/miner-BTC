@@ -1,1 +1,74 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<title>Fake Bitcoin Miner</title>
+<style>
+body{
+    margin:0;
+    font-family: Arial, sans-serif;
+    background:#0f172a;
+    color:#fff;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+}
+.card{
+    background:#020617;
+    padding:25px;
+    border-radius:12px;
+    width:320px;
+    text-align:center;
+}
+h1{margin-bottom:10px;}
+#btc{
+    font-size:26px;
+    margin:10px 0;
+    color:#22c55e;
+}
+button{
+    width:100%;
+    padding:12px;
+    border:none;
+    border-radius:8px;
+    font-size:16px;
+    cursor:pointer;
+    background:#2563eb;
+    color:white;
+}
+small{color:#94a3b8;}
+</style>
+</head>
+<body>
+
+<div class="card">
+    <h1>⛏ Fake BTC Miner</h1>
+    <div id="btc">0.00000000 BTC</div>
+
+    <button onclick="mine()">Minerar agora</button>
+    <br><br>
+    <small id="log">Pronto pra minerar...</small>
+</div>
+
+<script>
+let saldo = 0;
+
+function mine(){
+
+    // valor fake aleatório
+    let ganho = Math.random() * 0.0008;
+
+    saldo += ganho;
+
+    document.getElementById("btc").innerText =
+        saldo.toFixed(8) + " BTC";
+
+    document.getElementById("log").innerText =
+        "Bloco encontrado: +" + ganho.toFixed(8) + " BTC";
+}
+</script>
+
+</body>
+</html>
 
